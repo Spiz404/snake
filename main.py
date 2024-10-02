@@ -1,4 +1,5 @@
 import pygame
+import random
 import copy
 pygame.init()
 screen = pygame.display.set_mode((600, 600))
@@ -12,12 +13,24 @@ direction = -1
 
 snake_head = [15, 15]
 snake_positions = [[15,15], [15,14], [15, 13], [15, 12], [15, 11]]
+apples = 4
+apples_positions = []
+
+for i in range(apples):
+
+    apple = [0, 0]
+    while apple in snake_positions or apple in apples_positions:
+        apple = [random.randint(0, 29), random.randint(0, 29)]
+
+    apples_positions.append(apple)
 while True:
     for x in range(30):
         for y in range(30):
             rect = pygame.Rect(x * 20, y * 20, 20, 20)
             if [x,y] in snake_positions:
                 pygame.draw.rect(screen, (255, 255, 255), rect)
+            elif [x, y] in apples_positions:
+                pygame.draw.rect(screen, (255, 0, 0), rect)
             else: pygame.draw.rect(screen, (0, 0, 0), rect)
 
     # checking events
