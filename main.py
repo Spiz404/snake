@@ -8,11 +8,24 @@ pygame.display.set_caption("Snake Game")
 
 direction = -1
 
+new_game = True
 snake_head = [15, 15]
 snake_positions = [[15,15]]
 apples_positions = []
 to_append= False
 APPLES = 4
+BLACK = (0,0,0)
+WHITE = (255,255,255)
+RED = (255,0,0)
+game_over = False
+font = pygame.font.Font('freesansbold.ttf', 32)
+start_text = font.render('press one of the arrows', True, WHITE, BLACK)
+text_rect = start_text.get_rect()
+text_rect.center = (300,300)
+game_over_text = font.render('GAME OVER', True, RED, BLACK)
+game_over_text_rect = game_over_text.get_rect()
+game_over_text_rect.center = (300,300)
+
 for i in range(APPLES):
 
     apple = [0, 0]
@@ -21,6 +34,7 @@ for i in range(APPLES):
 
     apples_positions.append(apple)
 while True:
+
     for x in range(30):
         for y in range(30):
             rect = pygame.Rect(x * 20, y * 20, 20, 20)
@@ -30,6 +44,11 @@ while True:
                 pygame.draw.rect(screen, (255, 0, 0), rect)
             else: pygame.draw.rect(screen, (0, 0, 0), rect)
 
+    if new_game:
+        screen.blit(start_text, text_rect)
+
+    if game_over:
+        screen.blit(game_over_text, game_over_text_rect)
     # checking events
     for event in pygame.event.get():
 
@@ -37,7 +56,8 @@ while True:
             pygame.quit()
             exit()
 
-        if event.type == pygame.KEYDOWN:
+        if event.type == pygame.KEYDOWN and not game_over:
+            if new_game: new_game = False
             if event.key == pygame.K_UP:
                 direction = 0
             elif event.key == pygame.K_DOWN:
@@ -54,29 +74,27 @@ while True:
         snake_positions.append(old_positions[-1])
         to_append = False
 
-    if direction != -1:
+    if direction != -1 and not game_over:
         for i in range(1, len(snake_positions)):
             snake_positions[i] = old_positions[i-1]
 
     match direction:
 
         case 0:
-            if snake_positions[0][1] == 0: snake_positions[0][1] = 29
+            if snake_positions[0][1] == 0: game_over = True #snake_positions[0][1] = 29
             else: snake_positions[0][1] -= 1
         case 1:
-            if snake_positions[0][1] == 29: snake_positions[0][1] = 0
+            if snake_positions[0][1] == 29: game_over = True #snake_positions[0][1] = 0
             else: snake_positions[0][1] += 1
         case 2:
-            if snake_positions[0][0] == 0: snake_positions[0][0] = 29
+            if snake_positions[0][0] == 0: game_over = True #snake_positions[0][0] = 29
             else: snake_positions[0][0] -= 1
         case 3:
-            if snake_positions[0][0] == 29: snake_positions[0][0] = 0
+            if snake_positions[0][0] == 29: game_over = True #snake_positions[0][0] = 0
             else: snake_positions[0][0] += 1
 
     if snake_positions[0] in snake_positions[1:]:
-        print("game over")
-        pygame.quit()
-        exit()
+        game_over = True
 
     if snake_positions[0] in apples_positions:
         apples_positions.remove(snake_positions[0])
