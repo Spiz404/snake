@@ -7,15 +7,12 @@ clock = pygame.time.Clock()
 pygame.display.set_caption("Snake Game")
 
 direction = -1
-# 30 x 30 grid for snake
-#positions = [[0 for i in range(30)] for j in range(30)]
-#positions[15][15] = 1
 
 snake_head = [15, 15]
 snake_positions = [[15,15]]
 apples = 4
 apples_positions = []
-toAppend = False
+to_append= False
 for i in range(apples):
 
     apple = [0, 0]
@@ -36,7 +33,7 @@ while True:
     # checking events
     for event in pygame.event.get():
 
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT or pygame.key.get_pressed()[pygame.K_q]:
             pygame.quit()
             exit()
 
@@ -53,9 +50,9 @@ while True:
 
     old_positions = copy.deepcopy(snake_positions)
 
-    if toAppend:
+    if to_append:
         snake_positions.append(old_positions[-1])
-        toAppend = False
+        to_append = False
 
     if direction != -1:
         for i in range(1, len(snake_positions)):
@@ -88,5 +85,5 @@ while True:
         while apple in snake_positions or apple in apples_positions:
             apple = [random.randint(0, 29), random.randint(0, 29)]
         apples_positions.append(apple)
-        toAppend = True
+        to_append = True
     clock.tick(15)
