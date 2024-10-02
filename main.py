@@ -12,10 +12,10 @@ direction = -1
 #positions[15][15] = 1
 
 snake_head = [15, 15]
-snake_positions = [[15,15], [15,14], [15, 13], [15, 12], [15, 11]]
+snake_positions = [[15,15]]
 apples = 4
 apples_positions = []
-
+toAppend = False
 for i in range(apples):
 
     apple = [0, 0]
@@ -53,6 +53,10 @@ while True:
 
     old_positions = copy.deepcopy(snake_positions)
 
+    if toAppend:
+        snake_positions.append(old_positions[-1])
+        toAppend = False
+
     if direction != -1:
         for i in range(1, len(snake_positions)):
             snake_positions[i] = old_positions[i-1]
@@ -76,4 +80,13 @@ while True:
         print("game over")
         pygame.quit()
         exit()
+
+    if snake_positions[0] in apples_positions:
+        apples_positions.remove(snake_positions[0])
+        apples += 1
+        apple = [0, 0]
+        while apple in snake_positions or apple in apples_positions:
+            apple = [random.randint(0, 29), random.randint(0, 29)]
+        apples_positions.append(apple)
+        toAppend = True
     clock.tick(15)
