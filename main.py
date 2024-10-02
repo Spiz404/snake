@@ -10,10 +10,10 @@ direction = -1
 
 snake_head = [15, 15]
 snake_positions = [[15,15]]
-apples = 4
 apples_positions = []
 to_append= False
-for i in range(apples):
+APPLES = 4
+for i in range(APPLES):
 
     apple = [0, 0]
     while apple in snake_positions or apple in apples_positions:
@@ -40,11 +40,11 @@ while True:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 direction = 0
-            if event.key == pygame.K_DOWN:
+            elif event.key == pygame.K_DOWN:
                 direction = 1
-            if event.key == pygame.K_LEFT:
+            elif event.key == pygame.K_LEFT:
                 direction = 2
-            if event.key == pygame.K_RIGHT:
+            elif event.key == pygame.K_RIGHT:
                 direction = 3
     pygame.display.flip()
 
@@ -80,7 +80,6 @@ while True:
 
     if snake_positions[0] in apples_positions:
         apples_positions.remove(snake_positions[0])
-        apples += 1
         apple = [0, 0]
         while apple in snake_positions or apple in apples_positions:
             apple = [random.randint(0, 29), random.randint(0, 29)]
